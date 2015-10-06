@@ -1,5 +1,8 @@
 package coreAtom;
 
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.util.ArrayList;
 
 public class Bond {
@@ -71,6 +74,60 @@ public class Bond {
 		//sets equilibrium at halfway point
 		equilibrium = (c.m.getEquilibrium()+d.m.getEquilibrium())/2;
 		
+	}
+	
+	public void draw(Graphics2D g, ArrayList<Atom> atomList)
+	{
+		int host = getTargets()[0];
+	int target = getTargets()[1];
+	
+	
+	g.setColor(new Color(0, 0, 0));
+	
+		if (getStick())
+		{
+			g.setColor(new Color(255, 0, 0));
+		}
+		else
+		{
+			g.setColor(new Color(0, 255, 0));
+		}
+		
+		int pushColor = (int)(0.02/run.timeStep*getForce());
+		int pullColor = -(int)(0.02/run.timeStep*getForce());
+		
+		if (pushColor > 255)
+		{
+			pushColor = 255;
+		}
+		else if (pushColor < 0)
+		{
+			pushColor = 0;
+		}
+		if (pullColor > 255)
+		{
+			pullColor = 255;
+		}
+		else if (pullColor < 0)
+		{
+			pullColor = 0;				
+		}
+		
+		if (stick)
+		{
+			g.setColor(new Color(pushColor, 0, pullColor));
+		}
+		else
+		{
+			g.setColor(new Color(pushColor, 255, pullColor));
+		}
+		
+		g.setStroke(new BasicStroke(3));
+		g.drawLine((int)atomList.get(host).getPosition()[0], 
+				(int)atomList.get(host).getPosition()[1], 
+				(int)atomList.get(target).getPosition()[0], 
+				(int)atomList.get(target).getPosition()[1]);
+		g.setStroke(new BasicStroke(1));
 	}
 	
 	//return methods

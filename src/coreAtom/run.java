@@ -423,66 +423,8 @@ public class run extends JFrame implements Runnable, MouseListener, KeyListener,
 		{
 			if (bondList.get(u).length <= bondList.get(u).getMaxDist())
 			{
-				int host = bondList.get(u).getTargets()[0];
-				int target = bondList.get(u).getTargets()[1];
-				
-				g2.setColor(new Color(255, 255, 0));
-				atomList.get(host).draw(g2);
-				
-				g2.setColor(new Color(0, 0, 255));
-				atomList.get(target).draw(g2);
-				
-				g2.setColor(new Color(0, 0, 0));
-				
-				
-				
-				if (!bondList.get(u).getStick())
-				{
-					g2.setColor(new Color(255, 0, 0));
-				}
-				else
-				{
-					g2.setColor(new Color(0, 255, 0));
-				}
-				
-				int pushColor = (int)(0.02/timeStep*bondList.get(u).getForce());
-				int pullColor = -(int)(0.02/timeStep*bondList.get(u).getForce());
-				
-				if (pushColor > 255)
-				{
-					pushColor = 255;
-				}
-				else if (pushColor < 0)
-				{
-					pushColor = 0;
-				}
-				if (pullColor > 255)
-				{
-					pullColor = 255;
-				}
-				else if (pullColor < 0)
-				{
-					pullColor = 0;				
-				}
-				
-				if (bondList.get(u).stick)
-				{
-					g2.setColor(new Color(pushColor, 0, pullColor));
-				}
-				else
-				{
-					g2.setColor(new Color(pushColor, 255, pullColor));
-				}
-				
-				g2.setStroke(new BasicStroke(3));
-				g2.drawLine((int)atomList.get(host).getPosition()[0], 
-						(int)atomList.get(host).getPosition()[1], 
-						(int)atomList.get(target).getPosition()[0], 
-						(int)atomList.get(target).getPosition()[1]);
-				g2.setStroke(new BasicStroke(1));
-				
-				
-				
+				bondList.get(u).draw(g2, atomList);
+
 				//double force = bondList.get(u).getForce();
 				
 				//g2.drawString(Double.toString(Force.getRotation(atomList.get(host), atomList.get(target))[0]*force), (int)atomList.get(host).getPosition()[0], 
@@ -526,7 +468,6 @@ public class run extends JFrame implements Runnable, MouseListener, KeyListener,
 
 	public void mouseClicked(MouseEvent e) {
 		pressed = true;
-		System.out.println("nopenopenoepnopen");
 	}
 
 	public void mouseEntered(MouseEvent e) {

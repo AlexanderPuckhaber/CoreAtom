@@ -27,9 +27,9 @@ public class run extends JFrame implements Runnable, MouseListener, KeyListener,
 	boolean doRectangle = false;
 	public boolean stick = true;
 	
-	double targetTimeStep = 0.01;
+	double targetTimeStep = 0.04;
 	public double elapsedTime = 0;
-	public static double timeStep = 0.01;
+	public static double timeStep = 0.04;
 	//time
 	public double time = System.nanoTime();
 	public double lastTime = time;

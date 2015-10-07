@@ -11,7 +11,7 @@ public class Force {
 		Atom a2 = a.get(b.getTargets()[1]);
 		
 		double wF = 500;
-		double sF = 50000;
+		double sF = 500000;
 		double moveForce = 4;
 		
 		b.setLength(Collider.getDist(a1, a2));
@@ -22,6 +22,7 @@ public class Force {
 		double distance = b.getLength();
 		double force = 0;
 		
+		//does mass
 		double totalMass = a1.getMaterial().getMass()+a2.getMaterial().getMass();
 		double a1massFraction = a1.getMaterial().getMass()/totalMass;
 		double a2massFraction = a2.getMaterial().getMass()/totalMass;
@@ -34,12 +35,13 @@ public class Force {
 	        	//dampener
 	            force = (b.getLastLength()-b.getLength())*Math.pow(timeStep, -1);
 	            
+	            //if stretching, pull
 	            if (distance > b.getEquilibrium()){
-	                force -= b.getTensileStrength()*wF*(Math.pow(distance-b.getEquilibrium(), 2));
+	                force -= b.getTensileStrength()*wF*(Math.pow((distance-b.getEquilibrium())/distance, 2));
 	            }
-	            else
+	            else //if pulling, push
 	            {
-	                force += b.getCompressiveStrength()*wF*(Math.pow(b.getEquilibrium()-distance, 2));
+	                force += b.getCompressiveStrength()*wF*(Math.pow((b.getEquilibrium()-distance)/distance, 2));
 	            }
 	          
 	        }
@@ -49,7 +51,7 @@ public class Force {
 		}
         else if (distance <=b.getMinDist())
         {
-        	force = sF*(Math.pow((b.getMinDist()-distance)/distance, 2));
+        	force = sF*(Math.pow((b.getMinDist()-distance)/distance, 3));
         }
         
         

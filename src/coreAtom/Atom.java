@@ -3,6 +3,7 @@ package coreAtom;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -15,8 +16,14 @@ public class Atom {
     private double x;
     private double y;
     
+    ////////////////////START TRANSITION TO POINTS FROM X AND Y VALUES
+    private Point2D.Double p;
+    private Point2D.Double lP;
+    
     private double xVel;
     private double yVel;
+    
+    private double elapsedTime;
     
     private boolean inHardPoint = false;
     private boolean isActive = false;
@@ -30,6 +37,8 @@ public class Atom {
     {
     	x = 0;
     	y = 0;
+    	p = new Point2D.Double(0, 0);
+    	lP = new Point2D.Double(0, 0);
     }
     
     public void move(double timeStep)
@@ -37,6 +46,7 @@ public class Atom {
     	//x += xVel*Math.pow(timeStep, 2);
     	//y -= yVel*Math.pow(timeStep, 2);
     	
+    	lP.x = x;
     	
     	//if it's not in a hardpoint
     	if (!inHardPoint)
@@ -44,6 +54,10 @@ public class Atom {
     		x += xVel*timeStep;
     		yVel -= 100*timeStep;
     		y -= yVel*timeStep;
+    		
+    		p.x += xVel*timeStep;
+    		yVel -= 100*timeStep;
+    		p.y -= yVel*timeStep;
     	}
     	
     }
@@ -73,19 +87,19 @@ public class Atom {
     	if (isActive)
     	{
     		g.setColor(new Color(255, 0, 0));
-    		g.fillOval((int)(x-m.getMaxDist()), (int)(y-m.getMaxDist()), (int)(2*m.getMaxDist()), (int)(2*m.getMaxDist()));
+    		g.fillOval((int)(p.x-m.getMaxDist()), (int)(p.y-m.getMaxDist()), (int)(2*m.getMaxDist()), (int)(2*m.getMaxDist()));
     		//g.fillOval((int)x, (int)y, 50, 50);
     		System.out.println(m.getMaxDist());
     	}
     	else
     	{
-    		g.fillOval((int)(x-m.getMinDist()), (int)(y-m.getMinDist()), (int)(2*m.getMinDist()), (int)(2*m.getMinDist()));
+    		g.fillOval((int)(p.x-m.getMinDist()), (int)(p.y-m.getMinDist()), (int)(2*m.getMinDist()), (int)(2*m.getMinDist()));
     	}
     	
     	if (isRoad)
     	{
     		g.setColor(Color.black);
-    		g.fillOval((int)(x-m.getMinDist())+5, (int)(y-m.getMinDist())+5, (int)(2*m.getMinDist()-10), (int)(2*m.getMinDist())-10);
+    		g.fillOval((int)(p.x-m.getMinDist())+5, (int)(p.y-m.getMinDist())+5, (int)(2*m.getMinDist()-10), (int)(2*m.getMinDist())-10);
     		g.setColor(c);
     	}
     	
@@ -97,6 +111,9 @@ public class Atom {
     {
     	x = newX;
     	y = newY;
+    	
+    	p.x = newX;
+    	p.y = newY;
     }
     
     public void setVelocity(double newXVel, double newYVel)

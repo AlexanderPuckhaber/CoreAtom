@@ -11,11 +11,14 @@ public class Collider {
 	
 	static boolean stick;
 	static double maxBondLength;
+	public static int bondsChecked, bondsMade;
 	
 	public Collider()
 	{
 		stick = true;
 		maxBondLength = 100;
+		bondsChecked = 0;
+		bondsMade = 0;
 	}
 	
 	
@@ -58,6 +61,7 @@ public class Collider {
 						}
 						
 						bondList.add(newBond);
+						bondsMade++;
 						b.connectedTo.add(aLoc);
 						a.connectedTo.add(bLoc);
 					}
@@ -65,6 +69,7 @@ public class Collider {
 	
 			}
 		}
+		bondsChecked ++;
 		
 	}
 	

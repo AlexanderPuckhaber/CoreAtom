@@ -5,6 +5,7 @@ import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.Rectangle2D.Double;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.*;
@@ -98,6 +99,8 @@ public class QuadTree
 		}
 		return nullList;
 	}
+	
+
 	
 	//puts atoms in quads.  If the quads have too many atoms, they split
 	public void addAtoms(ArrayList<Atom> atomList, ArrayList<Integer> newAList, int maxAmount, int minSize)
@@ -454,10 +457,65 @@ public class QuadTree
 		return nullList;
 	}
 	
-	//draws it (mostly for debug)
-	public void draw(Graphics2D g)
+	public void drawQuadWithPoint(Graphics2D g, Point2D.Double p)
 	{
-		g.setColor(new Color(0, 255, 255, 40));
+		if (r.contains(p))
+		{
+			if (hasChildren)
+			{
+				ne.drawQuadWithPoint(g, p);
+				nw.drawQuadWithPoint(g, p);
+				se.drawQuadWithPoint(g, p);
+				sw.drawQuadWithPoint(g, p);
+			}
+			else
+			{
+				this.draw(g, Color.orange);
+			}
+		}
+	}
+	
+	public void findQuadWithPoint(QuadTree q, Point2D.Double p)
+	{
+		if (r.contains(p))
+		{
+			if (hasChildren)
+			{
+				ne.findQuadWithPoint(q, p);
+				nw.findQuadWithPoint(q, p);
+				se.findQuadWithPoint(q, p);
+				sw.findQuadWithPoint(q, p);
+			}
+			else
+			{
+				q = this;
+			}
+		}
+
+	}
+	
+	public void highlightAtom(Graphics2D g, int mX, int mY, Boolean clicked)
+	{
+		
+		Point2D.Double p = new Point2D.Double(mX, mY);
+		drawQuadWithPoint(g, p);
+		
+		QuadTree qua = new QuadTree(-1, -1, -1, -1);
+		findQuadWithPoint(qua, p);
+		
+		ArrayList<Integer> tmpList = new ArrayList<Integer>();
+		tmpList = qua.aList;
+		
+		for (int i = 0; i < tmpList.size(); i++)
+		{
+			//Atom a = 
+		}
+	}
+	
+	//draws it (mostly for debug)
+	public void draw(Graphics2D g, Color c)
+	{
+		g.setColor(c);
 		
 		if (hasChildren)
 		{
@@ -494,10 +552,10 @@ public class QuadTree
 		
 		if (hasChildren)
 		{
-			nw.draw(g);
-			ne.draw(g);
-			sw.draw(g);
-			se.draw(g);
+			nw.draw(g, c);
+			ne.draw(g, c);
+			sw.draw(g, c);
+			se.draw(g, c);
 		}
 	}
 	

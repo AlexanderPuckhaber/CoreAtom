@@ -122,7 +122,7 @@ public class Bond {
 			g.setColor(new Color(pushColor, 255, pullColor));
 		}
 		
-		g.setStroke(new BasicStroke(3));
+		g.setStroke(new BasicStroke(1));
 		g.drawLine((int)atomList.get(host).getPosition()[0], 
 				(int)atomList.get(host).getPosition()[1], 
 				(int)atomList.get(target).getPosition()[0], 

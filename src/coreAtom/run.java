@@ -1,6 +1,8 @@
 package coreAtom;
 
-
+/********************
+ * TODO: OPENGL, SAVING TO FILE, REVAMP PHYSICS (USE KHANACADEMY FOR THAT)
+ */
 import java.util.*;
 
 import javax.swing.*;
@@ -27,9 +29,9 @@ public class run extends JFrame implements Runnable, MouseListener, KeyListener,
 	boolean doRectangle = false;
 	public boolean stick = true;
 	
-	double targetTimeStep = 0.04;
+	double targetTimeStep = 0.01;
 	public double elapsedTime = 0;
-	public static double timeStep = 0.04;
+	public static double timeStep = 0.01;
 	//time
 	public double time = System.nanoTime();
 	public double lastTime = time;
@@ -171,6 +173,8 @@ public class run extends JFrame implements Runnable, MouseListener, KeyListener,
 				t.sleep((int)(1000*Math.abs(delay)));
 				paintTime += 1000*timeStep;
 				
+				c.bondsChecked = 0;
+				c.bondsMade = 0;
 
 				//places atoms with mouse
 				if (place && pause)
@@ -363,8 +367,9 @@ public class run extends JFrame implements Runnable, MouseListener, KeyListener,
 					clear = false;
 				}
 				
-
-				
+				System.out.println("MaxNumberOfComparisons: "+0.5*(atomList.size()+1)*(atomList.size()));
+				System.out.println("bonds checked: "+c.bondsChecked);
+				System.out.println("bonds made: "+c.bondsMade);
 				
 				//updates mouse positions
 				updateMouseLoc();
@@ -406,8 +411,9 @@ public class run extends JFrame implements Runnable, MouseListener, KeyListener,
 		
 		//draws quadtrees
 		g2.setColor(new Color(0, 255, 255));
-		root.draw(g2);
+		root.draw(g2, new Color(0, 255, 255));
 		
+		root.highlightAtom(g2, mouseX, mouseY, pressed);
 		
 		
 		g2.setColor(new Color(0, 0, 0));

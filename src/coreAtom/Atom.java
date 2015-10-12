@@ -24,6 +24,7 @@ public class Atom {
     private double yVel;
     
     private double elapsedTime;
+    public boolean firstStep;
     
     private boolean inHardPoint = false;
     private boolean isActive = false;
@@ -39,6 +40,7 @@ public class Atom {
     	y = 0;
     	p = new Point2D.Double(0, 0);
     	lP = new Point2D.Double(0, 0);
+    	firstStep = true;
     }
     
     public void move(double timeStep)
@@ -46,7 +48,8 @@ public class Atom {
     	//x += xVel*Math.pow(timeStep, 2);
     	//y -= yVel*Math.pow(timeStep, 2);
     	
-    	lP.x = x;
+    	lP.x = p.x;
+    	lP.y = p.y;
     	
     	//if it's not in a hardpoint
     	if (!inHardPoint)
@@ -59,7 +62,7 @@ public class Atom {
     		yVel -= 100*timeStep;
     		p.y -= yVel*timeStep;
     	}
-    	
+    	firstStep = false;
     }
     
     public void updateConnections(ArrayList<Bond> bondList, int target)
@@ -101,6 +104,13 @@ public class Atom {
     		g.setColor(Color.black);
     		g.fillOval((int)(p.x-m.getMinDist())+5, (int)(p.y-m.getMinDist())+5, (int)(2*m.getMinDist()-10), (int)(2*m.getMinDist())-10);
     		g.setColor(c);
+    	}
+    	
+    	//draw line
+    	if (!firstStep)
+    	{
+    		g.setColor(Color.BLACK);
+    		g.drawLine((int)p.x, (int)p.y, (int)lP.x, (int)lP.y);
     	}
     	
     }

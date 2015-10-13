@@ -10,6 +10,7 @@ public class Bond {
 	public double length;
 	public double lastLength;
 	private double lastTimeStep;
+	private double hazardTime;
 	
 	private double minDist;
 	private double maxDist;
@@ -34,6 +35,11 @@ public class Bond {
 	public void setLastLength(double newLastLength)
 	{
 		lastLength = newLastLength;
+	}
+	
+	public void setHazardTime(double newHazardTime)
+	{
+		hazardTime = newHazardTime;
 	}
 	
 	public void setTargets(int newA, int newB)
@@ -123,10 +129,10 @@ public class Bond {
 		}
 		
 		g.setStroke(new BasicStroke(1));
-		g.drawLine((int)atomList.get(host).getPosition()[0], 
-				(int)atomList.get(host).getPosition()[1], 
-				(int)atomList.get(target).getPosition()[0], 
-				(int)atomList.get(target).getPosition()[1]);
+		g.drawLine((int)atomList.get(host).getPoint().x, 
+				(int)atomList.get(host).getPoint().y, 
+				(int)atomList.get(target).getPoint().x, 
+				(int)atomList.get(target).getPoint().y);
 		g.setStroke(new BasicStroke(1));
 	}
 	
@@ -150,6 +156,11 @@ public class Bond {
 	public double getLastLength()
 	{
 		return lastLength;
+	}
+	
+	public double getHazardTime()
+	{
+		return hazardTime;
 	}
 	
 	public double getLastTimeStep()

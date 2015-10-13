@@ -185,10 +185,10 @@ public class Atom {
     
     //get methods
     
-    public double[] getPosition()
-    {
-    	return new double[]{x, y};
-    }
+    //public double[] getPosition()
+    //{
+   // 	return new double[]{x, y};
+   // }
     
     public double[] getVelocity()
     {
@@ -213,6 +213,11 @@ public class Atom {
 	public Material getMaterial()
 	{
 		return m;
+	}
+	
+	public Point2D.Double getPoint()
+	{
+		return p;
 	}
     
 }

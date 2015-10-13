@@ -87,7 +87,7 @@ public class QuadTree
 				for (int i = 0; i < edgeList.size(); i++)
 				{
 					Point2D.Double p = new Point2D.Double();
-					p.setLocation(atomList.get(edgeList.get(i)).getPosition()[0], atomList.get(edgeList.get(i)).getPosition()[1]);
+					p.setLocation(atomList.get(edgeList.get(i)).getPoint().x, atomList.get(edgeList.get(i)).getPoint().y);
 					
 					if (bR.contains(p))
 					{
@@ -117,7 +117,7 @@ public class QuadTree
 		{
 			for (int i = 0; i < atomList.size(); i++)
 			{
-				p.setLocation(atomList.get(i).getPosition()[0], atomList.get(i).getPosition()[1]);
+				p.setLocation(atomList.get(i).getPoint().x, atomList.get(i).getPoint().y);
 				
 				if (r.contains(p))
 				{
@@ -144,7 +144,7 @@ public class QuadTree
 		else {
 			for (int g = 0; g < newAList.size(); g++)
 			{
-				p.setLocation(atomList.get(newAList.get(g)).getPosition()[0], atomList.get(newAList.get(g)).getPosition()[1]);
+				p.setLocation(atomList.get(newAList.get(g)).getPoint().x, atomList.get(newAList.get(g)).getPoint().y);
 				
 				if (r.contains(p))
 				{
@@ -223,8 +223,8 @@ public class QuadTree
 		//makes rectangle smaller by the distance
 		cR = new Rectangle2D.Double(cR.x+dist, cR.y+dist, cR.width-dist, cR.height-dist);
 		
-		aX = atomList.get(y).getPosition()[0];
-		aY = atomList.get(y).getPosition()[1];
+		aX = atomList.get(y).getPoint().x;
+		aY = atomList.get(y).getPoint().y;
 		p = new Point2D.Double(aX, aY);
 		
 		//if the point is completely inside, do nothing
@@ -306,8 +306,8 @@ public class QuadTree
 				a = atomList.get(bondList.get(i).getTargets()[0]);
 				b = atomList.get(bondList.get(i).getTargets()[1]);
 				
-				p1 = new Point2D.Double(a.getPosition()[0], a.getPosition()[1]);
-				p2 = new Point2D.Double(b.getPosition()[0], b.getPosition()[1]);
+				p1 = new Point2D.Double(a.getPoint().x, a.getPoint().y);
+				p2 = new Point2D.Double(b.getPoint().x, b.getPoint().y);
 				
 				if (r.contains(p1) && r.contains(p2))
 				{
@@ -339,8 +339,8 @@ public class QuadTree
 				a = atomList.get(bondList.get(newBList.get(i)).getTargets()[0]);
 				b = atomList.get(bondList.get(newBList.get(i)).getTargets()[1]);
 				
-				p1 = new Point2D.Double(a.getPosition()[0], a.getPosition()[1]);
-				p2 = new Point2D.Double(b.getPosition()[0], b.getPosition()[1]);
+				p1 = new Point2D.Double(a.getPoint().x, a.getPoint().y);
+				p2 = new Point2D.Double(b.getPoint().x, b.getPoint().y);
 				
 				if (r.contains(p1) && r.contains(p2))
 				{

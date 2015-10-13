@@ -10,8 +10,8 @@ public class Force {
 		Atom a1 = a.get(b.getTargets()[0]);
 		Atom a2 = a.get(b.getTargets()[1]);
 		
-		double wF = 500;
-		double sF = 500000;
+		double wF = 5000; 	//keeps bonds near equilibrium
+		double sF = 5000;	//pushes atoms apart if below min dist
 		double moveForce = 4;
 		
 		b.setLength(Collider.getDist(a1, a2));
@@ -30,43 +30,75 @@ public class Force {
 		
 		if (b.getStick())
 		{
-	        if (distance <= b.getMaxDist() && distance > b.getMinDist()){
+			//if the distance is between the max and min distances
+	        if (distance <= b.getMaxDist() && distance > b.getMinDist())
+	        {
 	        	
 	        	//dampener
 	            force = (b.getLastLength()-b.getLength())*Math.pow(timeStep, -1);
 	            
 	            //if stretching, pull
-	            if (distance > b.getEquilibrium()){
+	            if (distance > b.getEquilibrium())
+	            {
 	                force -= b.getTensileStrength()*wF*(Math.pow((distance-b.getEquilibrium())/distance, 2));
+	                
+	                
 	            }
-	            else //if pulling, push
+	            else //if contracting, push
 	            {
 	                force += b.getCompressiveStrength()*wF*(Math.pow((b.getEquilibrium()-distance)/distance, 2));
+	              
+	               
 	            }
 	          
 	        }
-	        else if (distance <=b.getMinDist()){
+	        //if the distance is close to minimum, push hard
+	        else if (distance <=b.getMinDist())
+	        {
 	        	force = sF*(Math.pow((b.getMinDist()-distance)/distance, 2));
+	        	
+	        	//if situation didn't improve last time
+                if (distance < b.getLastLength())
+                {
+                	b.setHazardTime(b.getHazardTime()+timeStep);
+                }
+                else
+                {
+                	b.setHazardTime(0);
+                }
 	        }
 		}
         else if (distance <=b.getMinDist())
         {
-        	force = sF*(Math.pow((b.getMinDist()-distance)/distance, 3));
+        	force = sF*(Math.pow((b.getMinDist()-distance)/distance, 2));
+        	
+        	//if situation didn't improve last time
+            if (distance < b.getLastLength())
+            {
+            	b.setHazardTime(b.getHazardTime()+timeStep);
+            }
+            else
+            {
+            	b.setHazardTime(0);
+            }
         }
         
         
 		
 		//force = 1;
 		force *= timeStep;
+		force *= 1+b.getHazardTime();
+		
 		b.setForce(force);
 		
+		System.out.println(force);
 		
 		
 		//"car" atom drives on road atoms
 		if (a1.isActive() && a2.isRoad() && distance < b.getMaxDist())
 		{
 			//if the other is to the left and below
-			if (a2.getPosition()[0] < a1.getPosition()[0] && a2.getPosition()[1] > a1.getPosition()[1])
+			if (a2.getPoint().x < a1.getPoint().x && a2.getPoint().y > a1.getPoint().y)
 			{
 				//repel
 				force += moveForce;
@@ -77,7 +109,7 @@ public class Force {
 		else if (a2.isActive() && a1.isRoad() && distance < b.getMaxDist())
 		{
 			//if the other is to the left and below
-			if (a1.getPosition()[0] < a2.getPosition()[0] && a1.getPosition()[1] > a2.getPosition()[1])
+			if (a1.getPoint().x < a2.getPoint().x && a1.getPoint().y > a2.getPoint().y)
 			{
 				//repel
 				force += moveForce;
@@ -116,9 +148,9 @@ public class Force {
 	
 	public static double[] getRotation (Atom a, Atom b){
 	    double hypotenuse = Collider.getDist(a, b);
-	    double xAngle = ((a.getPosition()[0]-b.getPosition()[0])/hypotenuse);
+	    double xAngle = ((a.getPoint().x-b.getPoint().x)/hypotenuse);
 	    
-	    double yAngle = ((a.getPosition()[1]-b.getPosition()[1])/hypotenuse);
+	    double yAngle = ((a.getPoint().y-b.getPoint().y)/hypotenuse);
 
 	    return new double[]{xAngle, yAngle};
 	}

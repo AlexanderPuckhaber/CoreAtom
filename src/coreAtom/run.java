@@ -29,9 +29,9 @@ public class run extends JFrame implements Runnable, MouseListener, KeyListener,
 	boolean doRectangle = false;
 	public boolean stick = true;
 	
-	double targetTimeStep = 0.01;
+	double targetTimeStep = 0.04;
 	public double elapsedTime = 0;
-	public static double timeStep = 0.01;
+	public static double timeStep = 0.014;
 	//time
 	public double time = System.nanoTime();
 	public double lastTime = time;
@@ -364,12 +364,12 @@ public class run extends JFrame implements Runnable, MouseListener, KeyListener,
 				 */
 				if (clear)
 				{
-					clear = false;
+					//clear = false;
 				}
 				
-				System.out.println("MaxNumberOfComparisons: "+0.5*(atomList.size()+1)*(atomList.size()));
-				System.out.println("bonds checked: "+c.bondsChecked);
-				System.out.println("bonds made: "+c.bondsMade);
+				//System.out.println("MaxNumberOfComparisons: "+0.5*(atomList.size()+1)*(atomList.size()));
+				//System.out.println("bonds checked: "+c.bondsChecked);
+				//System.out.println("bonds made: "+c.bondsMade);
 				
 				//updates mouse positions
 				updateMouseLoc();

@@ -5,14 +5,14 @@ import java.util.ArrayList;
 
 public class Force {
 
-	public static void applyForce(ArrayList<Atom> a, Bond b, double timeStep)
+	public static void calculateForce(ArrayList<Atom> a, Bond b, double timeStep)
 	{
 		Atom a1 = a.get(b.getTargets()[0]);
 		Atom a2 = a.get(b.getTargets()[1]);
 		
 		double wF = 100000; 	//keeps bonds near equilibrium
 		double sF = 10000;	//pushes atoms apart if below min dist
-		double moveForce = 4;
+		
 		double timeMultiplier = 0.2;
 		double dampenerMultiplier = 2;
 		
@@ -24,10 +24,7 @@ public class Force {
 		double distance = b.getLength();
 		double force = 0;
 		
-		//does mass
-		double totalMass = a1.getMaterial().getMass()+a2.getMaterial().getMass();
-		double a1massFraction = a1.getMaterial().getMass()/totalMass;
-		double a2massFraction = a2.getMaterial().getMass()/totalMass;
+		
 		
 		
 		if (b.getStick())
@@ -97,58 +94,41 @@ public class Force {
 		
 		if (force > 0)
 		System.out.println(force);
+	}
+	
+	public static void applyForce(Bond b, ArrayList<Atom> a)
+	{
+		double force = b.getForce();
+		double moveForce = 4;
+		double distance = b.getLength();
 		
+		Atom a1 = a.get(b.getTargets()[0]);
+		Atom a2 = a.get(b.getTargets()[1]);
 		
-		//"car" atom drives on road atoms
-		if (a1.isActive() && a2.isRoad() && distance < b.getMaxDist())
-		{
-			//if the other is to the left and below
-			if (a2.getPoint().x < a1.getPoint().x && a2.getPoint().y > a1.getPoint().y)
-			{
-				//repel
-				force += moveForce;
+		//does mass
+				double totalMass = a1.getMaterial().getMass()+a2.getMaterial().getMass();
+				double a1massFraction = a1.getMaterial().getMass()/totalMass;
+				double a2massFraction = a2.getMaterial().getMass()/totalMass;
 				
-			}
-
-		}
-		else if (a2.isActive() && a1.isRoad() && distance < b.getMaxDist())
-		{
-			//if the other is to the left and below
-			if (a1.getPoint().x < a2.getPoint().x && a1.getPoint().y > a2.getPoint().y)
-			{
-				//repel
-				force += moveForce;
+		
+					
+				double dA1X = (getRotation(a1, a2)[0]*force*a2massFraction);
+				double dA1Y = (-getRotation(a1, a2)[1]*force*a2massFraction);
 				
-			}
-		}
-		
-		
-			
-		double dA1X = (getRotation(a1, a2)[0]*force*a2massFraction);
-		double dA1Y = (-getRotation(a1, a2)[1]*force*a2massFraction);
-		
-		double dA2X = (-getRotation(a1, a2)[0]*force*a1massFraction);
-		double dA2Y = (getRotation(a1, a2)[1]*force*a1massFraction);
-		
-		//if one is active and the other is road
-		if ((a1.isActive() && a2.isRoad() || a2.isActive() && a1.isRoad()))
-		{
-			a2.setVelocity(a2.getVelocity()[0]+dA2X,  a2.getVelocity()[1]+dA2Y);
-	    	a1.setVelocity(a1.getVelocity()[0]+dA1X,  a1.getVelocity()[1]+dA1Y);
-		}
-		//if one is active and the other isn't a road, do nothing
-		else if (a1.isActive() || a2.isActive())
-		{
-			
-		}
-		//if neither are active, calculate the forces normally
-		else
-		{
-			a2.setVelocity(a2.getVelocity()[0]+dA2X,  a2.getVelocity()[1]+dA2Y);
-			a1.setVelocity(a1.getVelocity()[0]+dA1X,  a1.getVelocity()[1]+dA1Y);
-		}
-        
-		
+				double dA2X = (-getRotation(a1, a2)[0]*force*a1massFraction);
+				double dA2Y = (getRotation(a1, a2)[1]*force*a1massFraction);
+				
+				//if both are active, do nothing
+				if (a1.isActive() || a2.isActive())
+				{
+					
+				}
+				//if neither are active, calculate the forces normally
+				else
+				{
+					a2.setVelocity(a2.getVelocity()[0]+dA2X,  a2.getVelocity()[1]+dA2Y);
+					a1.setVelocity(a1.getVelocity()[0]+dA1X,  a1.getVelocity()[1]+dA1Y);
+				}
 	}
 	
 	public static double[] getRotation (Atom a, Atom b){

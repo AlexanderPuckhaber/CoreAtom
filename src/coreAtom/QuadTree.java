@@ -401,7 +401,8 @@ public class QuadTree
 			for (int i = 0; i < bList.size(); i++)
 			{
 				Bond b = bondList.get(bList.get(i));
-				Force.applyForce(atomList, b, run.timeStep);
+				Force.calculateForce(atomList, b, run.timeStep);
+				Force.applyForce(b, atomList);
 			}
 			
 			

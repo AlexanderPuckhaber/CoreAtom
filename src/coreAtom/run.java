@@ -29,9 +29,9 @@ public class run extends JFrame implements Runnable, MouseListener, KeyListener,
 	boolean doRectangle = false;
 	public boolean stick = true;
 	
-	double targetTimeStep = 0.02;
+	double targetTimeStep = 0.002;
 	public double elapsedTime = 0;
-	public static double timeStep = 0.04;
+	public static double timeStep = 0.01;
 	//time
 	public double time = System.nanoTime();
 	public double lastTime = time;
@@ -413,7 +413,12 @@ public class run extends JFrame implements Runnable, MouseListener, KeyListener,
 		g2.setColor(new Color(0, 255, 255));
 		root.draw(g2, new Color(0, 255, 255));
 		
-		root.highlightAtom(g2, mouseX, mouseY, pressed);
+		for (int n = 0; n < atomList.size(); n++)
+		{
+			atomList.get(n).setColor(atomList.get(n).getMaterial().getColor());
+		}
+		
+		root.highlightAtom(g2, mouseX, mouseY, pressed, atomList);
 		
 		
 		g2.setColor(new Color(0, 0, 0));

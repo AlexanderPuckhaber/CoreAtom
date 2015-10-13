@@ -303,6 +303,11 @@ public class QuadTree
 			//sets atom a and b
 			for (int i = 0; i < bondList.size(); i++)
 			{
+				int ai = bondList.get(i).getTargets()[0];
+				int bi = bondList.get(i).getTargets()[1];
+				
+				if (ai < atomList.size() && bi < atomList.size())
+				{
 				a = atomList.get(bondList.get(i).getTargets()[0]);
 				b = atomList.get(bondList.get(i).getTargets()[1]);
 				
@@ -328,6 +333,7 @@ public class QuadTree
 					{
 						bList.add(newBList.get(i));
 					}
+				}
 				}
 			}
 		}
@@ -475,41 +481,60 @@ public class QuadTree
 		}
 	}
 	
-	public void findQuadWithPoint(QuadTree q, Point2D.Double p)
+	public void highlightAtomsInQuadWithPoint(Point2D.Double p, int mX, int mY, ArrayList<Atom> atomList)
 	{
 		if (r.contains(p))
 		{
 			if (hasChildren)
 			{
-				ne.findQuadWithPoint(q, p);
-				nw.findQuadWithPoint(q, p);
-				se.findQuadWithPoint(q, p);
-				sw.findQuadWithPoint(q, p);
+				ne.highlightAtomsInQuadWithPoint(p, mX, mY, atomList);
+				nw.highlightAtomsInQuadWithPoint(p, mX, mY, atomList);
+				se.highlightAtomsInQuadWithPoint(p, mX, mY, atomList);
+				sw.highlightAtomsInQuadWithPoint(p, mX, mY, atomList);
 			}
 			else
 			{
-				q = this;
+				ArrayList<Integer> tmpList = new ArrayList<Integer>();
+				tmpList = aList;
+				
+				for (int i = 0; i < tmpList.size(); i++)
+				{
+					System.out.println(i);
+					Atom a = new Atom();
+					int maxDist = 100;
+					int y = tmpList.get(i);
+					if (y < atomList.size())
+					{
+						a = atomList.get(y);
+						System.out.println(y);
+						//if (Math.sqrt(Math.pow(a.getPoint().x-mX, 2)+Math.pow(a.getPoint().y-mY, 2)) < maxDist)
+						{
+							a.setColor(new Color(255, 255, 0));
+							System.out.println(y);
+						}
+					}
+				}
 			}
+
+
 		}
+
 
 	}
 	
-	public void highlightAtom(Graphics2D g, int mX, int mY, Boolean clicked)
+	public void highlightAtom(Graphics2D g, int mX, int mY, Boolean clicked, ArrayList<Atom> atomList)
 	{
 		
 		Point2D.Double p = new Point2D.Double(mX, mY);
 		drawQuadWithPoint(g, p);
-		
 		QuadTree qua = new QuadTree(-1, -1, -1, -1);
-		findQuadWithPoint(qua, p);
+		highlightAtomsInQuadWithPoint(p, mX, mY, atomList);
 		
-		ArrayList<Integer> tmpList = new ArrayList<Integer>();
-		tmpList = qua.aList;
+		System.out.println(qua.r.x);
 		
-		for (int i = 0; i < tmpList.size(); i++)
-		{
-			//Atom a = 
-		}
+		g.fillRect((int)qua.r.x, (int)qua.r.y, (int)qua.r.width, (int)qua.r.height);
+		
+		
 	}
 	
 	//draws it (mostly for debug)

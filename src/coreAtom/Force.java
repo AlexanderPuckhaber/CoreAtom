@@ -10,9 +10,10 @@ public class Force {
 		Atom a1 = a.get(b.getTargets()[0]);
 		Atom a2 = a.get(b.getTargets()[1]);
 		
-		double wF = 5000; 	//keeps bonds near equilibrium
-		double sF = 5000;	//pushes atoms apart if below min dist
+		double wF = 50; 	//keeps bonds near equilibrium
+		double sF = 100;	//pushes atoms apart if below min dist
 		double moveForce = 4;
+		double timeMultiplier = 0.8;
 		
 		b.setLength(Collider.getDist(a1, a2));
 		
@@ -40,13 +41,13 @@ public class Force {
 	            //if stretching, pull
 	            if (distance > b.getEquilibrium())
 	            {
-	                force -= b.getTensileStrength()*wF*(Math.pow((distance-b.getEquilibrium())/distance, 2));
+	                force -= b.getTensileStrength()*wF*(Math.pow((distance-b.getEquilibrium())/(distance+1), 2));
 	                
 	                
 	            }
 	            else //if contracting, push
 	            {
-	                force += b.getCompressiveStrength()*wF*(Math.pow((b.getEquilibrium()-distance)/distance, 2));
+	                force += b.getCompressiveStrength()*wF*(Math.pow((b.getEquilibrium()-distance)/(distance+1), 2));
 	              
 	               
 	            }
@@ -55,12 +56,12 @@ public class Force {
 	        //if the distance is close to minimum, push hard
 	        else if (distance <=b.getMinDist())
 	        {
-	        	force = sF*(Math.pow((b.getMinDist()-distance)/distance, 2));
+	        	force = sF*(Math.pow((b.getMinDist()-distance)/(distance+1), 2));
 	        	
 	        	//if situation didn't improve last time
                 if (distance < b.getLastLength())
                 {
-                	b.setHazardTime(b.getHazardTime()+timeStep);
+                	b.setHazardTime(b.getHazardTime()+timeStep*timeMultiplier);
                 }
                 else
                 {
@@ -70,12 +71,12 @@ public class Force {
 		}
         else if (distance <=b.getMinDist())
         {
-        	force = sF*(Math.pow((b.getMinDist()-distance)/distance, 2));
+        	force = sF*(Math.pow((b.getMinDist()-distance)/(distance+1), 2));
         	
         	//if situation didn't improve last time
             if (distance < b.getLastLength())
             {
-            	b.setHazardTime(b.getHazardTime()+timeStep);
+            	b.setHazardTime(b.getHazardTime()+timeStep*timeMultiplier);
             }
             else
             {
@@ -91,6 +92,7 @@ public class Force {
 		
 		b.setForce(force);
 		
+		if (force > 0)
 		System.out.println(force);
 		
 		

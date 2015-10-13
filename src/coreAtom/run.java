@@ -29,9 +29,9 @@ public class run extends JFrame implements Runnable, MouseListener, KeyListener,
 	boolean doRectangle = false;
 	public boolean stick = true;
 	
-	double targetTimeStep = 0.04;
+	double targetTimeStep = 0.02;
 	public double elapsedTime = 0;
-	public static double timeStep = 0.014;
+	public static double timeStep = 0.04;
 	//time
 	public double time = System.nanoTime();
 	public double lastTime = time;
@@ -83,7 +83,7 @@ public class run extends JFrame implements Runnable, MouseListener, KeyListener,
 		
 		//Initializes materials
 		goop.setMass(1);
-		goop.setMinDist(13);
+		goop.setMinDist(16);
 		goop.setMaxDist(40);
 		goop.setDampener(10);
 		goop.setTensileStrength(0.3);

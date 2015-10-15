@@ -166,19 +166,6 @@ public class Collider {
 		}
 	}
 	
-	public static void stickToRectangles(Atom a, ArrayList<Rectangle2D.Double> rList)
-	{
-		Point2D.Double p = a.getPoint();
-		
-		for (int i = 0; i < rList.size(); i++)
-		{
-			if (rList.get(i).contains(p) && !a.isActive())
-			{
-				a.setInHardPoint();
-				a.setVelocity(0, 0);
-			}
-		}
-	}
 	
 	public static void removeOverlappers(ArrayList<Atom> atomList, double minSpace)
 	{

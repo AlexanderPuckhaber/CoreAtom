@@ -11,10 +11,10 @@ public class Force {
 		Atom a2 = a.get(b.getTargets()[1]);
 		
 		double wF = 100000; 	//keeps bonds near equilibrium
-		double sF = 10000;	//pushes atoms apart if below min dist
+		double sF = 50000;	//pushes atoms apart if below min dist
 		
-		double timeMultiplier = 0.2;
-		double dampenerMultiplier = 2;
+		double timeMultiplier = 20.0;
+		double dampenerMultiplier = .1;
 		
 		b.setLength(Collider.getDist(a1, a2));
 		
@@ -25,7 +25,8 @@ public class Force {
 		double force = 0;
 		
 		
-		
+		//dampener
+        //force = dampenerMultiplier*(b.getLastLength()-b.getLength())*Math.pow(timeStep, -1);
 		
 		if (b.getStick())
 		{
@@ -33,8 +34,7 @@ public class Force {
 	        if (distance <= b.getMaxDist() && distance > b.getMinDist())
 	        {
 	        	
-	        	//dampener
-	            force = dampenerMultiplier*(b.getLastLength()-b.getLength())*Math.pow(timeStep, -1);
+	        	
 	            
 	            //if stretching, pull
 	            if (distance > b.getEquilibrium())
@@ -55,7 +55,7 @@ public class Force {
 	        else if (distance <=b.getMinDist())
 	        {
 	        	//force = sF*(Math.pow((b.getMinDist()-distance)/(distance+1), 2));
-	        	force = sF*((b.getMinDist()-distance)/(b.getMinDist()));
+	        	force = sF*((b.getEquilibrium()-distance)/(b.getEquilibrium()));
 	        	
 	        	//if situation didn't improve last time
                 if (distance < b.getLastLength())
@@ -66,12 +66,19 @@ public class Force {
                 {
                 	b.setHazardTime(0);
                 }
+                /*
+                double estimatedDistChange = force*timeStep*timeStep*(1+b.getHazardTime());
+                if (distance + estimatedDistChange > b.getEquilibrium())
+                {
+                	force *= 0.5;
+                }
+                */
 	        }
 		}
         else if (distance <=b.getMinDist())
         {
         	//force = sF*(Math.pow((b.getMinDist()-distance)/(distance+1), 2));
-        	force = sF*((b.getMinDist()-distance)/(b.getMinDist()));
+        	force = sF*((b.getEquilibrium()-distance)/(b.getEquilibrium()));
         	
         	//if situation didn't improve last time
             if (distance < b.getLastLength())
@@ -82,7 +89,15 @@ public class Force {
             {
             	b.setHazardTime(0);
             }
+            
         }
+		
+		if (force > 0)
+		{
+		//dampener
+			force += dampenerMultiplier*((b.getLastLength()-b.getLength())/b.getLength())*Math.pow(timeStep, -1);
+			
+		}
         
         
 		
@@ -152,4 +167,3 @@ public class Force {
 	
 	
 }
-

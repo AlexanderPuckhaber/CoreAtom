@@ -71,8 +71,8 @@ public class Atom {
     	g.setColor(c);
     	
     	
-    	g.drawOval((int)(p.x-m.getMinDist()), (int)(p.y-m.getMinDist()), (int)(2*m.getMinDist()), (int)(2*m.getMinDist()));
-    	g.fillOval((int)(p.x-m.getMaxDist()), (int)(p.y-m.getMaxDist()), (int)(2*m.getMaxDist()), (int)(2*m.getMaxDist()));
+    	g.fillOval((int)(p.x-m.getMinDist()), (int)(p.y-m.getMinDist()), (int)(2*m.getMinDist()), (int)(2*m.getMinDist()));
+    	g.drawOval((int)(p.x-m.getMaxDist()), (int)(p.y-m.getMaxDist()), (int)(2*m.getMaxDist()), (int)(2*m.getMaxDist()));
     		
     	//draw line
     	if (!firstStep)
